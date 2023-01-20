@@ -5,26 +5,36 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     Rigidbody rigidBody;
-    public float speed = 5;
-    float horizontalDirection;
+    Color originalColor;
     float verticalDirection;
+    float horizontalDirection;
+
+    public int score;
+    public float timeLeft = 10;
+    public Color newColor;
+    public float speed = 5;
+    public bool moving = false;
 
     // Start is called before the first frame update
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
+        originalColor = GetComponent<MeshRenderer>().material.color;
     }
 
     // Update is called once per frame
     void Update()
     {
-        horizontalDirection = Input.GetAxis("Horizontal");
         verticalDirection = Input.GetAxis("Vertical");
+        horizontalDirection = Input.GetAxis("Horizontal");
+
+        timeLeft -= Time.deltaTime;
     }
 
     public void FixedUpdate()
     {
         Move();
+        ColorChange();
     }
 
     public void Move()
@@ -32,14 +42,28 @@ public class Movement : MonoBehaviour
         float horizontalSpeed = horizontalDirection * (speed * 100) * Time.deltaTime;
         float verticalSpeed = verticalDirection * (speed * 100) * Time.deltaTime;
 
-        if (horizontalSpeed != 0)
+        if (horizontalSpeed != 0 || verticalSpeed != 0)
         {
-            rigidBody.velocity = new Vector3(horizontalSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
+            moving = true;
+            rigidBody.velocity = new Vector3(horizontalSpeed, rigidBody.velocity.y, verticalSpeed);
         }
 
-        if (verticalSpeed != 0)
+        if (horizontalSpeed == 0 && verticalSpeed == 0)
         {
-            rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, verticalSpeed);
+            moving = false;
+            rigidBody.velocity = new Vector3(horizontalSpeed, rigidBody.velocity.y, verticalSpeed);
+        }
+    }
+
+    public void ColorChange()
+    {
+        if (moving)
+        {
+            GetComponent<MeshRenderer>().material.color = newColor;
+        }
+        else
+        {
+            GetComponent<MeshRenderer>().material.color = originalColor;
         }
     }
 }

@@ -406,6 +406,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  moving: 0
+  newColor: {r: 0.24670699, g: 0.6792453, b: 0.26027682, a: 0}
 --- !u!4 &899019698 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5866994998942718810, guid: f1473a03b46404d51a970655d647772a, type: 3}
