@@ -25,10 +25,18 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        verticalDirection = Input.GetAxis("Vertical");
-        horizontalDirection = Input.GetAxis("Horizontal");
+        if (timeLeft > 0)
+        {
+            verticalDirection = Input.GetAxis("Vertical");
+            horizontalDirection = Input.GetAxis("Horizontal");
+        }
 
         timeLeft -= Time.deltaTime;
+
+        if (timeLeft <= 0)
+        {
+            timeLeft = 0;
+        }
     }
 
     public void FixedUpdate()
