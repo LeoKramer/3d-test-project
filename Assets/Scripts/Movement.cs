@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Movement : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class Movement : MonoBehaviour
     public Color newColor;
     public float speed = 5;
     public bool moving = false;
+    public TMP_Text scoreValue;
+    public TMP_Text timeLeftValue;
+    public TMP_Text highScoreValue;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +36,9 @@ public class Movement : MonoBehaviour
         }
 
         timeLeft -= Time.deltaTime;
+
+        timeLeftValue.text = timeLeft.ToString();
+        scoreValue.text = score.ToString();
 
         if (timeLeft <= 0)
         {
