@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
     Color originalColor;
     float verticalDirection;
     float horizontalDirection;
+    int highScore;
 
     public int score;
     public float timeLeft = 10;
@@ -24,6 +25,9 @@ public class Movement : MonoBehaviour
     {
         rigidBody = GetComponent<Rigidbody>();
         originalColor = GetComponent<MeshRenderer>().material.color;
+
+        highScore = PlayerPrefs.GetInt("HighScore");
+        highScoreValue.text = highScore.ToString();
     }
 
     // Update is called once per frame
@@ -37,12 +41,18 @@ public class Movement : MonoBehaviour
 
         timeLeft -= Time.deltaTime;
 
-        timeLeftValue.text = timeLeft.ToString();
         scoreValue.text = score.ToString();
+        timeLeftValue.text = timeLeft.ToString();
 
         if (timeLeft <= 0)
         {
             timeLeft = 0;
+            if (score > highScore)
+            {
+                highScore = score;
+                PlayerPrefs.SetInt("HighScore", highScore);
+                highScoreValue.text = highScore.ToString();
+            }
         }
     }
 
