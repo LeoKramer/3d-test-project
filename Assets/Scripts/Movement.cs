@@ -10,6 +10,8 @@ public class Movement : MonoBehaviour
     float verticalDirection;
     float horizontalDirection;
     int highScore;
+    Vector3 originalPosition;
+    float originalTimeLeft;
 
     public int score;
     public float timeLeft = 10;
@@ -19,15 +21,26 @@ public class Movement : MonoBehaviour
     public TMP_Text scoreValue;
     public TMP_Text timeLeftValue;
     public TMP_Text highScoreValue;
+    public GameObject bar;
+    public GameObject startScreen;
+    public GameObject gameOverScreen;
 
     // Start is called before the first frame update
     void Start()
     {
+        Time.timeScale = 0;
+        startScreen.SetActive(true);
+        bar.SetActive(false);
+        gameOverScreen.SetActive(false);
+
         rigidBody = GetComponent<Rigidbody>();
         originalColor = GetComponent<MeshRenderer>().material.color;
 
         highScore = PlayerPrefs.GetInt("HighScore");
         highScoreValue.text = highScore.ToString();
+
+        originalPosition = gameObject.transform.position;
+        originalTimeLeft = timeLeft;
     }
 
     // Update is called once per frame
@@ -46,6 +59,9 @@ public class Movement : MonoBehaviour
 
         if (timeLeft <= 0)
         {
+            bar.SetActive(false);
+            gameOverScreen.SetActive(true);
+
             timeLeft = 0;
             if (score > highScore)
             {
@@ -90,5 +106,30 @@ public class Movement : MonoBehaviour
         {
             GetComponent<MeshRenderer>().material.color = originalColor;
         }
+    }
+
+    public void StartGame()
+    {
+        Time.timeScale = 1;
+        startScreen.SetActive(false);
+        bar.SetActive(true);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void restartLevel()
+    {
+        gameOverScreen.SetActive(false);
+        startScreen.SetActive(true);
+
+        Time.timeScale = 0;
+
+        gameObject.transform.position = originalPosition;
+        timeLeft = originalTimeLeft;
+        score = 0;
+        highScore = PlayerPrefs.GetInt("HighScore");
     }
 }
